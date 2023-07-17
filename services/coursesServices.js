@@ -28,9 +28,14 @@ const {connection} = require('../db/dbConnection');
     return await query("select * from courses");
   }
 
+  async function searchCourses(search) {
+    const query = util.promisify(connection.query).bind(connection);
+    return await query(`select * from courses ${search}`);
+  }
+
   async function getCollectionname(collectionName) {
     const query = util.promisify(connection.query).bind(connection);
     return await query("select * from courses where collectionName = ?", [collectionName]);
   }
 
-module.exports = {getCourseById, updateCourse, deleteCourse, createCourse, showcourses, getCollectionname}
+module.exports = {getCourseById, updateCourse, deleteCourse, createCourse, showcourses, getCollectionname, searchCourses}

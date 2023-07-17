@@ -6,6 +6,7 @@ const {
   createCourse,
   deleteCourse,
   showcourses,
+  searchCourses,
   getCollectionname,
 } = require("../services/coursesServices");
 
@@ -112,7 +113,15 @@ async function deleteC(req, res) {
 
 async function showCourses(req, res) {
   try {
-    const courses = await showcourses();
+    let courses;
+    let search = "";
+    if (req.query.search) {
+      console.log('flag');
+      search = `where name like '%${req.query.search}%' or description like '%${req.query.description}%' or collectionName like '%${req.query.collectionName}%' or content like '%${req.query.content}%'`;
+      courses = await searchCourses(search)
+    }else{
+     courses = await showcourses();
+    }
     if (courses) {
       courses.map((course) => {
         course.image_url = "http://" + req.hostname + ":3000/" + course.image;

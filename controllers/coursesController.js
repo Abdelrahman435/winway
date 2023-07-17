@@ -116,11 +116,10 @@ async function showCourses(req, res) {
     let courses;
     let search = "";
     if (req.query.search) {
-      console.log('flag');
       search = `where name like '%${req.query.search}%' or description like '%${req.query.description}%' or collectionName like '%${req.query.collectionName}%' or content like '%${req.query.content}%'`;
-      courses = await searchCourses(search)
-    }else{
-     courses = await showcourses();
+      courses = await searchCourses(search);
+    } else {
+      courses = await showcourses();
     }
     if (courses) {
       courses.map((course) => {

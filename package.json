@@ -1,0 +1,29 @@
+{
+  "name": "winway",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "@ffprobe-installer/ffprobe": "^2.1.1",
+    "bcrypt": "^5.1.0",
+    "child_process": "^1.0.2",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-validator": "^7.0.1",
+    "ffmpeg": "^0.0.4",
+    "ffprobe": "^1.1.2",
+    "fluent-ffmpeg": "^2.1.2",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "node-ffprobe": "^3.0.0",
+    "nodemon": "^3.0.1",
+    "password-validator": "^5.3.0",
+    "util": "^0.12.5"
+  }
+}

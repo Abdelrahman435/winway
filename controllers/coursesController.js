@@ -10,6 +10,7 @@ const {
   getCollectionname,
 } = require("../services/coursesServices");
 
+
 async function update(req, res) {
   try {
     const errors = req.validationErrors();

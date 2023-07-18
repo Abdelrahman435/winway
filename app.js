@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var expressValidator = require('express-validator');
 
 
 const signupRouter = require('./routes/signup');
@@ -10,6 +11,8 @@ var homeRouter = require('./routes/home');
 const loginRouter = require('./routes/login');
 const courseRouter = require('./routes/coursesRoutes');
 const videos = require('./routes/videos');
+const reviewRouter = require('./routes/review')
+
 
 var app = express();
 
@@ -29,6 +32,8 @@ app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/courseRouter', courseRouter)
 app.use('/videos', videos)
+app.use('/reviews',reviewRouter)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

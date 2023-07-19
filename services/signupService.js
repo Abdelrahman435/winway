@@ -46,8 +46,7 @@ async function getUser(id){
     try {
         const query = util.promisify(connection.query).bind(connection);
         const idd = await query("select * from users where id = ?", [id]);
-        console.log(idd.length);
-        return idd.length > 0;
+        return idd;
     } catch (error) {
         console.log(error);
     }

@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 var passwordValidator = require("password-validator");
 const jwt = require('jsonwebtoken');
 var schema = new passwordValidator();
-const {nanoid} = require('nanoid');
+const { nanoid } =  import('nanoid');
 const {
   getEmail,
   insertUser,

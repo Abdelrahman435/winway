@@ -20,6 +20,7 @@ const reviewRouter = require('./routes/review')
 const quizs = require('./routes/quiz')
 const auth = require('./routes/auth');
 const facebookAuth = require('./routes/facebookAuth');
+const profile = require('./routes/profile');
 
 const {protect} = require('./middleware/protect');
 
@@ -62,6 +63,7 @@ app.use('/reviews',reviewRouter)
 app.use('/quizs',quizs)
 app.use('/auth', auth); //http://localhost:3000/auth/google
 app.use('/facebook', facebookAuth);
+app.use('/profile', profile);
 
 
 // catch 404 and forward to error handler

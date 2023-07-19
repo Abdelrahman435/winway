@@ -10,7 +10,9 @@ const {
   showvideos,
   checkCourse,
 } = require("../services/videosServices");
+const {getModuleById} = require("../services/moduleServices")
 const e = require("express");
+const { log } = require("util");
 
 async function update(req, res) {
   try {
@@ -34,7 +36,7 @@ async function update(req, res) {
     }
 
     const videoObj = {
-      name: req.body.name,
+      name_of_video: req.body.name_of_video,
       time_of_video: new Date().toISOString(),
       fileName: req.files.fi[0].filename,
     };
@@ -83,18 +85,25 @@ async function create(req, res) {
 
     // INSERT NEW Video or txt
     const videoData = {
-      name: req.body.name,
+      name_of_video: req.body.name_of_video,
       time_of_video: req.body.time_of_video,
       image: req.files.image[0].filename, // Use the filename of the uploaded image
       fileName: req.files.fileName[0].filename,
       course_id: req.params.course_id, // Use the filename of the uploaded video
-      time_of_upload: length
+      time_of_upload: length,
+      module_id: req.params.module_id
     };
-    await createVideo(videoData);
-
+    const module = await getModuleById(req.params.module_id)
+    console.log(module.length);
+    if(module.length> 0){
     res.status(200).json({
-      msg: "Video created successfully",
+      msg: await createVideo(videoData, videoData.module_id)
     });
+  }else{
+    res.status(200).json({
+      msg: "Module not found"
+    });
+  }
   }
   else {
     res.status(200).json({

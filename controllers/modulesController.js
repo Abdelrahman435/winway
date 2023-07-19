@@ -1,6 +1,6 @@
 const util = require("util")
 const fs = require("fs")
-const{createModule , getModuleById ,deletModule , getmoduls}=require("../services/moduleServices")
+const{createModule , getModuleById ,deletModule , getmoduls, getVideos}=require("../services/moduleServices")
 const { getCourseById } = require("../services/coursesServices")
 
 
@@ -13,7 +13,7 @@ async function addModule (req,res){
             return res.status(404).json({errors: ["Course not found"]})
         }
         const moduleObj={
-            name:req.body.name,
+            name_of_module:req.body.name_of_module,
             size:req.body.size,
             course_id: course[0].id
         };
@@ -42,8 +42,18 @@ async function getModuleOne (req,res){
         if(!module.length > 0){
             return res.status(404).json({ errors: ["Module not found"] });
         }
-        res.status(200).json(module);
+        const videos = await getVideos(req.params.id)
+        if (videos) {
+            videos.map((video) => {
+            video.image = "http://" + req.hostname + ":3000/" + video.image;
+          });
+          videos.map((video) => {
+            video.fileName= "http://" + req.hostname + ":3000/" + video.fileName;        
+          });
 
+        res.status(200).json(videos);
+
+    }
     } catch (err) {
         console.error(err);
         res.status(500).json({ errors: ["Internal server error"] });

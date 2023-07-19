@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 var passwordValidator = require("password-validator");
 const jwt = require('jsonwebtoken');
 var schema = new passwordValidator();
-const { nanoid } =  require('nanoid');
+const { nanoid } = require('nanoid');
 const {
   getEmail,
   insertUser,
@@ -62,7 +62,7 @@ async function postSignup(req, res) {
       console.log(otp);
       let message = {
         from: "WINWAY",
-        to: /*req.body.email*/"hamo.hegazi2@gmail.com",
+        to: req.body.email,
         subject: "Verify",
         text: `otp is ${otp}`,
         html: `<p>otp is<br> <h1>${otp}</h1></p>`,
@@ -88,6 +88,7 @@ async function postSignup(req, res) {
       const token = await jwt.sign({userId: id}, process.env.JWT_SECRET_KEY, {
         expiresIn: process.env.JWT_EXPIRE_TIME
       })
+      delete obj.password;
       res.status(201).json({data: obj, token});
     } else {
       return res.status(400).json({ msg: "Email already exist" });

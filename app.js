@@ -4,6 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressValidator = require('express-validator');
+const cors = require('cors');
+const passport = require('passport');
+const cookieSession = require('cookie-session');
+require('dotenv').config();
+const passportSetup = require('./passport');
 
 
 const signupRouter = require('./routes/signup');
@@ -13,10 +18,30 @@ const courseRouter = require('./routes/coursesRoutes');
 const videos = require('./routes/videos');
 const reviewRouter = require('./routes/review')
 const quizs = require('./routes/quiz')
+const auth = require('./routes/auth');
+const facebookAuth = require('./routes/facebookAuth');
 
+const {protect} = require('./middleware/protect');
 
 var app = express();
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["cyberwolve"],
+    maxAge: 24 * 60 * 60 * 100,
+  })
+);
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -35,6 +60,8 @@ app.use('/courseRouter', courseRouter)
 app.use('/videos', videos)
 app.use('/reviews',reviewRouter)
 app.use('/quizs',quizs)
+app.use('/auth', auth); //http://localhost:3000/auth/google
+app.use('/facebook', facebookAuth);
 
 
 // catch 404 and forward to error handler

@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { getUser } = require("../services/loginService");
+const { getUser, isVerified } = require("../services/loginService");
 const {
   getId,
 } = require("../services/signupService");
@@ -13,18 +13,17 @@ async function login(req, res, next) {
       return res.status(400).json({ msg: "password isn't correct" });
     }
     delete result[0].password;
+    if(!result[0].verified){
+      return res.status(401).json({msg:"your account needs to be verified..."});
+    }
     const id = await getId(req.body.email);
-      const token = await jwt.sign({userId: id}, process.env.JWT_SECRET_KEY, {
-        expiresIn: process.env.JWT_EXPIRE_TIME
+    const token = await jwt.sign({userId: id}, process.env.JWT_SECRET_KEY, {
+      expiresIn: process.env.JWT_EXPIRE_TIME
       })
-      res.status(201).json({data: result, token});
+    res.status(200).json({data: result, token});
   } catch (error) {
     return res.status(400).json({ msg: "The email address or mobile number you entered isn't connected to an account." });
   }
 }
-
-// async function loginFacebook(req, res, next) {
-  
-// }
 
 module.exports = { login };

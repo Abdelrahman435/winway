@@ -11,6 +11,15 @@ async function getEmail(email){
     }
 }
 
+async function getEmailInfo(email){
+    try {
+        const query = util.promisify(connection.query).bind(connection);
+        const getEmail = await query("select * from users where email = ?", [email]);
+        return getEmail;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 async function insertUser(data){
     try {
@@ -52,7 +61,26 @@ async function getUser(id){
     }
 }
 
+async function getOTP(id){
+    try {
+        const query = util.promisify(connection.query).bind(connection);
+        const idd = await query("select * from otp where id = ?", [id]);
+        return idd;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function verify(id){
+    try {
+        const query = util.promisify(connection.query).bind(connection);
+        const idd = await query("UPDATE users SET verified = ? where id = ?", [true, id]);
+        return idd;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 
-module.exports = {getEmail, insertUser, insertOTP, getId, getUser};
+module.exports = {getEmail, insertUser, insertOTP, getId, getUser, getOTP, verify, getEmailInfo};

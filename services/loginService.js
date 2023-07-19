@@ -15,4 +15,14 @@ async function getUser(email,password){
     }
 }
 
-module.exports = {getUser};
+async function isVerified(email){
+    try {
+        const query = util.promisify(connection.query).bind(connection);
+        const verified = await query("select verified from users where email = ?", [email]);
+        return verified;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+module.exports = {getUser, isVerified};

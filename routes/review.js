@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const {protect} = require('../middleware/protect');
 const{addReview,getReview ,getReviewOne ,delet}= require("../controllers/ReviewController")
 //const{validate}=require("../validation/ReviewValidation");
 //var validators = require('../validation/');
@@ -11,10 +12,10 @@ const reviewValidation = {
     }),
   }
 
-router.post('/:studentId/:courseId',validate(reviewValidation, {}, {}),addReview)
-router.get('/:courseId',getReview )
-router.get('/one/:id', getReviewOne)
-router.delete('/del/:id', delet)
+router.post('/:studentId/:courseId',protect,validate(reviewValidation, {}, {}),addReview)
+router.get('/:courseId',protect,getReview )
+router.get('/one/:id',protect, getReviewOne)
+router.delete('/del/:id',protect, delet)
 
 
 module.exports=router

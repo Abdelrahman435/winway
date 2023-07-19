@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const {protect} = require('../middleware/protect');
 const upload = require("../middleware/uploadFiles");
 const {
   update,
@@ -13,6 +14,7 @@ const { validate } = require("../validation/coursesValidation");
 
 router.post(
   "/createCourse",
+  protect,
   upload.single('image'),
   validate(),
   create
@@ -20,18 +22,19 @@ router.post(
 
 router.put(
   "/update/:id",
+  protect,
   upload.single('image'),
   validate(),
   update
 );
 
-router.delete("/deleteCourse/:id", validate(), deleteC);
+router.delete("/deleteCourse/:id", protect,validate(), deleteC);
 
-router.get("/getCourse/:id", validate(), showCourse);
+router.get("/getCourse/:id", protect, validate(), showCourse);
 
-router.get("/getCourses", validate(), showCourses);
+router.get("/getCourses", protect, validate(), showCourses);
 
-router.get("/:collectionName", validate(), getCollectioName);
+router.get("/:collectionName", protect, validate(), getCollectioName);
 
 module.exports = router;
 

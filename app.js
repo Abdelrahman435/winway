@@ -22,6 +22,7 @@ const auth = require('./routes/auth');
 const facebookAuth = require('./routes/facebookAuth');
 const profile = require('./routes/profile');
 const modules = require('./routes/module');
+const verify = require('./routes/verifyOTP');
 
 
 const {protect} = require('./middleware/protect');
@@ -67,6 +68,7 @@ app.use('/auth', auth); //http://localhost:3000/auth/google
 app.use('/facebook', facebookAuth);
 app.use('/profile', profile);
 app.use('/module', modules);
+app.use('/verify', verify);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

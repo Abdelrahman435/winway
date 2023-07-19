@@ -38,3 +38,10 @@ passport.deserializeUser((user, done)=>{
     done(null, user);
 });
 
+
+
+
+// npm uninstall passport
+
+// npm install passport@0.5
+

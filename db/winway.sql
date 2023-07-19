@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 18, 2023 at 10:15 AM
+-- Generation Time: Jul 19, 2023 at 05:22 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -127,7 +127,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `phone`, `country`, `gender`, `birthday`, `image`) VALUES
 (1, 'ali', 'ahmed', 'hmd@yahoo.com', '$2b$10$BNFOlt7R9Qy3g5qW072dpePXpi/UwKLDwPMsJekmw5WLlS5aNlcQG', 0, '', '', '0000-00-00', ''),
-(2, 'ali', 'ahmed', 'hmd2@yahoo.com', '$2b$10$Agm9wEsdc7phTYGHdQYcge1Me0olrbCZfCjjCmcPsM27TZm/33yQS', 0, '', '', '0000-00-00', '');
+(2, 'Abdo', 'Hassan', 'ah5@gmail.com', '$2b$10$1fjfnSVElTw58yOc8CLO6OOMdja9l0Co6BXfdJOFREvkkjQkmwOqG', 1210201342, 'Egypt', 'male', '2002-03-19', '1689736722792.jpg');
 
 -- --------------------------------------------------------
 
@@ -175,7 +175,8 @@ ALTER TABLE `courses`
 -- Indexes for table `questions`
 --
 ALTER TABLE `questions`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `courseQuiz` (`course_id`);
 
 --
 -- Indexes for table `reviews`
@@ -220,7 +221,7 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -249,6 +250,12 @@ ALTER TABLE `videos`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `courseQuiz` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reviews`

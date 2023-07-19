@@ -7,6 +7,7 @@ const {
   deleteQuiz,
   showquizs,
 } = require("../services/quizService");
+const{getCourseById} = require('../services/coursesServices')
 
 async function update(req, res) {
   try {
@@ -16,29 +17,21 @@ async function update(req, res) {
     }
 
     const quiz = await getQuizById(req.params.id);
-    if (!course[0]) {
-      return res.status(404).json({ errors: ["Course not found"] });
+    if (!quiz[0]) {
+      return res.status(404).json({ errors: ["Quiz not found"] });
     }
 
-    const courseObj = {
-      name: req.body.name,
-      description: req.body.description,
-      durations: req.body.durations,
-      price: req.body.price,
-      features: req.body.features,
+    const quizObj = {
+      question: req.body.question,
+      correct_answer: req.body.correct_answer,
+      incorrect_answers: req.body.incorrect_answer,
+      time: req.body.time,
     };
 
-    if (req.file) {
-      courseObj.image = req.file.filename;
-      if (course && course.image) {
-        fs.unlinkSync("../upload/" + course[0].image);
-      }
-    }
-
-    await updateCourse(course[0].id, courseObj);
+    await updateQuiz(quiz[0].id, quizObj);
 
     res.status(200).json({
-      msg: "Course updated",
+      msg: "quiz updated",
     });
   } catch (err) {
     console.error(err);
@@ -52,56 +45,49 @@ async function create(req, res) {
     if (!errors) {
       return res.status(400).json({ errors: "error" });
     }
-
-    if (!req.file) {
-      // Check if image file exists
-      return res.status(400).json({
-        errors: [{ msg: "Image is Required" }],
-      });
+    let id = req.params.course_id
+    console.log(id);
+    let course = getCourseById(id)
+    if(!course.length>0){
+      res.status(404).json({errors: "course not found"});
     }
 
-    // INSERT NEW COURSE
-    const courseData = {
-      name: req.body.name,
-      description: req.body.description,
-      durations: req.body.durations,
-      price: req.body.price,
-      features: req.body.features,
-      image: req.file.filename, // Use the filename of the uploaded image
-      mentor_id: req.body.mentor_id,
-      // videos: req.files.videos[0].filename, // Use the filename of the uploaded video
-      collectionName: req.body.collectionName,
+    // INSERT NEW Qiuz
+    const quizData = {
+        question: req.body.question,
+        correct_answer: req.body.correct_answer,
+        incorrect_answers: req.body.incorrect_answers,
+        time: req.body.time,
+        course_id: id
     };
 
-    await createCourse(courseData);
+    await createQuiz(quizData);
 
     res.status(200).json({
-      msg: "Course created successfully",
+      msg: "Quiz created successfully",
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ errors: ["Internal server error"] });
+    // console.error(err);
+    // res.status(500).json({ errors: ["Internal server error"] });
   }
 }
 
-async function deleteC(req, res) {
+async function deleteQ(req, res) {
   try {
     const errors = req.validationErrors();
     if (!errors) {
       return res.status(400).json({ errors: "error" });
     }
 
-    const course = await getCourseById(req.params.id);
-    if (!course[0]) {
-      return res.status(404).json({ errors: ["Course not found"] });
+    const quiz = await getQuizById(req.params.id);
+    if (!quiz[0]) {
+      return res.status(404).json({ errors: ["Quiz not found"] });
     }
 
-    fs.unlinkSync("./upload/" + course[0].image);
-
-    await deleteCourse(course[0].id);
+    await deleteQuiz(quiz[0].id);
 
     res.status(200).json({
-      msg: "Course Deleted successfully",
+      msg: "Quiz Deleted successfully",
     });
   } catch (err) {
     console.error(err);
@@ -109,24 +95,15 @@ async function deleteC(req, res) {
   }
 }
 
-async function showCourses(req, res) {
+async function showQuizs(req, res) {
   try {
-    let courses;
-    let search = "";
-    if (req.query.search) {
-      search = `where name like '%${req.query.search}%' or description like '%${req.query.description}%' or collectionName like '%${req.query.collectionName}%' or content like '%${req.query.content}%'`;
-      courses = await searchCourses(search);
+    let quizs;
+    
+      quizs = await showquizs();
+    if (quizs) {
+      res.status(200).json(quizs);
     } else {
-      courses = await showcourses();
-    }
-    if (courses) {
-      courses.map((course) => {
-        course.image_url = "http://" + req.hostname + ":3000/" + course.image;
-      });
-
-      res.status(200).json(courses);
-    } else {
-      res.status(404).json({ errors: ["No courses found"] });
+      res.status(404).json({ errors: ["No Quizs found"] });
     }
   } catch (err) {
     console.error(err);
@@ -134,18 +111,17 @@ async function showCourses(req, res) {
   }
 }
 
-async function showCourse(req, res) {
+async function showQuiz(req, res) {
   try {
-    const course = await getCourseById(req.params.id);
-    if (!course[0]) {
-      return res.status(404).json({ errors: ["Course not found"] });
+    const quiz = await getQuizById(req.params.id);
+    if (!quiz[0]) {
+      return res.status(404).json({ errors: ["Quiz not found"] });
     }
 
-    if (course) {
-      course[0].image = "http://" + req.hostname + ":3000/" + course[0].image;
-      res.status(200).json(course);
+    if (quiz) {
+      res.status(200).json(quiz)
     } else {
-      res.status(404).json({ errors: ["No courses found"] });
+      res.status(404).json({ errors: ["No Quizs found"] });
     }
   } catch (err) {
     console.error(err);
@@ -153,28 +129,11 @@ async function showCourse(req, res) {
   }
 }
 
-async function getCollectioName(req, res) {
-  try {
-    const courses = await getCollectionname(req.params.collectionName);
-    if (courses) {
-      courses.map((course) => {
-        course.image_url = "http://" + req.hostname + ":3000/" + course.image;
-      });
 
-      res.status(200).json(courses);
-    } else {
-      res.status(404).json({ errors: ["No courses found"] });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ errors: ["Internal server error"] });
-  }
-}
 module.exports = {
   update,
   create,
-  deleteC,
-  showCourses,
-  showCourse,
-  getCollectioName,
+  deleteQ,
+  showQuizs,
+  showQuiz,
 };

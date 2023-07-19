@@ -12,7 +12,7 @@ const {
 const { validate } = require("../validation/videosValidation");
 
 router.post(
-  "/create/:course_id",
+  "/create/:course_id/:module_id",
   protect,
   upload.fields([
     { name: "image", maxCount: 1 },

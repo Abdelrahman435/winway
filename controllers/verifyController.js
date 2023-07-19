@@ -21,3 +21,4 @@ async function verifyUser(req,res){
 }
 
 module.exports = {verifyUser};
+

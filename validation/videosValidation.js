@@ -3,7 +3,7 @@ const upload= require('../middleware/uploadFiles')
 
   function validate() {
     return [
-      body("name")
+      body("name_of_video")
         .isString()
         .withMessage("Please enter a valid course name"),
 

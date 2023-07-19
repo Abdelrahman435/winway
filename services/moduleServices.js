@@ -11,6 +11,13 @@ async function getModuleById(id){
     const module = await query("SELECT * FROM modulecourses WHERE id = ?" ,[id])
     return module
 }
+
+async function getVideos(id){
+    const query = util.promisify(connection.query).bind(connection)
+    const videos =  await query("SELECT *, modulecourses.name_of_module, modulecourses.id FROM videos INNER JOIN modulecourses ON videos.module_id = modulecourses.id WHERE videos.module_id = ?", [id]);
+    return videos
+}
+
 async function getmoduls(id){
     const query = util.promisify(connection.query).bind(connection)
     const modules = await query("SELECT * FROM modulecourses WHERE course_id = ?" ,[id])
@@ -21,4 +28,4 @@ async function deletModule(id){
     await query("delete from modulecourses where id = ?" ,[id])
 
 }
-module.exports = {createModule , getmoduls , deletModule , getModuleById}
+module.exports = {createModule , getmoduls , deletModule , getModuleById, getVideos}

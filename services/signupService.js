@@ -81,6 +81,15 @@ async function verify(id){
     }
 }
 
+async function deleteOTP(id){
+    try {
+        const query = util.promisify(connection.query).bind(connection);
+        const idd = await query("DELETE from otp where id = ?", [id]);
+        return idd;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
-module.exports = {getEmail, insertUser, insertOTP, getId, getUser, getOTP, verify, getEmailInfo};
+module.exports = {getEmail, insertUser, insertOTP, getId, getUser, getOTP, verify, getEmailInfo, deleteOTP};

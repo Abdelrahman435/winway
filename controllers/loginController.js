@@ -4,6 +4,9 @@ const {
   getId,
 } = require("../services/signupService");
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const express = require('express');
+const app = express();
 
 
 async function login(req, res, next) {
@@ -20,10 +23,22 @@ async function login(req, res, next) {
     const token = await jwt.sign({userId: id}, process.env.JWT_SECRET_KEY, {
       expiresIn: process.env.JWT_EXPIRE_TIME
       })
+      app.use(function (req,res,next){
+        req.headers['Authorization'] = `Bearer ${token}`;
+        next();
+      })
     res.status(200).json({data: result, token});
   } catch (error) {
     return res.status(400).json({ msg: "The email address or mobile number you entered isn't connected to an account." });
   }
 }
 
-module.exports = { login };
+async function facebookLogin(req,res){
+  res.redirect('http://localhost:3000/facebook');
+}
+
+async function gmailLogin(req,res){
+  res.redirect('http://localhost:3000/auth/google');
+}
+
+module.exports = { login, facebookLogin, gmailLogin};

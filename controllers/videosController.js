@@ -38,7 +38,7 @@ async function update(req, res) {
     const videoObj = {
       name_of_video: req.body.name_of_video,
       time_of_video: new Date().toISOString(),
-      fileName: req.files.fi[0].filename,
+      fileName: req.files.fileName[0].filename,
     };
 
     

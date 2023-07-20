@@ -23,11 +23,18 @@ const facebookAuth = require('./routes/facebookAuth');
 const profile = require('./routes/profile');
 const modules = require('./routes/module');
 const verify = require('./routes/verifyOTP');
+const changedPassword = require('./routes/forgotPassword');
 
+var app = express();
 
 const {protect} = require('./middleware/protect');
 
-var app = express();
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOlt7ImlkIjoiZ21haWxVc2VyIn1dLCJpYXQiOjE2ODk3OTkxNjIsImV4cCI6MTY4OTgyNzk2Mn0.fiZO5WQ88Awo2nBXTAjrAYhcVZ7r4AT5CEtzZJzAfT";
+app.use(function (req,res,next){
+  req.headers['Authorization'] = `Bearer ${token}`;
+  next();
+})
+
 app.use(
   cookieSession({
     name: "session",
@@ -69,6 +76,8 @@ app.use('/facebook', facebookAuth);
 app.use('/profile', profile);
 app.use('/module', modules);
 app.use('/verify', verify);
+app.use('/resetPassword', changedPassword);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

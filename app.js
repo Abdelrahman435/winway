@@ -24,6 +24,9 @@ const profile = require('./routes/profile');
 const modules = require('./routes/module');
 const verify = require('./routes/verifyOTP');
 const changedPassword = require('./routes/forgotPassword');
+const cartRouter = require('./routes/cartRouter')
+const videos_watched = require('./routes/videoWatched')
+const courseCart = require('./routes/student')
 
 var app = express();
 
@@ -77,6 +80,9 @@ app.use('/profile', profile);
 app.use('/module', modules);
 app.use('/verify', verify);
 app.use('/resetPassword', changedPassword);
+app.use('/cart',cartRouter)
+app.use('/videos_watched',videos_watched)
+app.use('/coursesCart',courseCart)
 
 
 // catch 404 and forward to error handler

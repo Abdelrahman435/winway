@@ -42,6 +42,12 @@ const {connection} = require('../db/dbConnection');
     return await query("select * from videos");
   }
 
+  async function getModule(id, course_id){
+    const query = util.promisify(connection.query).bind(connection)
+    const module = await query("SELECT * FROM modulecourses WHERE id = ? and course_id =?" ,[id, course_id])
+    return module
+}
 
 
-module.exports = {getVideoById, updateVideo, deleteVideo, createVideo, showvideos, checkCourse, }
+
+module.exports = {getVideoById, updateVideo, deleteVideo, createVideo, showvideos, checkCourse, getModule}

@@ -1,9 +1,8 @@
 const util = require("util");
 const fs = require("fs");
-const {add} = require('../services/videoWatchedServ')
+const {add, getVideo} = require('../services/videoWatchedServ')
 const { getUser} = require('../services/signupService');
 const { getCourseById } = require("../services/coursesServices");
-const { getVideoById } = require("../services/videosServices");
 const {checkIfExists} = require('../services/cartService')
 
 async function addVideoWatched(req,res){
@@ -11,7 +10,7 @@ async function addVideoWatched(req,res){
         if(await checkIfExists(req.params.course_id, req.params.user_id)){
         const user = await getUser(req.params.user_id)
         const course = await getCourseById(req.params.course_id)
-        const video = await getVideoById(req.params.videos_id)
+        const video = await getVideo(req.params.videos_id, req.params.course_id)
         if(user.length > 0 && course.length > 0 && video.length > 0){
             const data = {
                 course_id:req.params.course_id ,

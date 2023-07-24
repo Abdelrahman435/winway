@@ -9,6 +9,8 @@ const {
   searchCourses,
   getCollectionname,
 } = require("../services/coursesServices");
+const { getRating, showvideos} = require('../services/studentServices')
+
 
 
 
@@ -115,7 +117,7 @@ async function deleteC(req, res) {
 
 async function showCourses(req, res) {
   try {
-    let courses;
+    let courses = [];
     let search = "";
     if (req.query.search) {
       search = `where name like '%${req.query.search}%' or description like '%${req.query.description}%' or collectionName like '%${req.query.collectionName}%' or content like '%${req.query.content}%'`;
@@ -124,11 +126,22 @@ async function showCourses(req, res) {
       courses = await showcourses();
     }
     if (courses) {
-      courses.map((course) => {
-        course.image_url = "http://" + req.hostname + ":3000/" + course.image;
-      });
-
-      res.status(200).json(courses);
+      const courseDataArr = [];
+      for (let i = 0; i < courses.length; i++) {
+        let rating = await getRating(courses[i].courseId);
+        let videos = await showvideos(courses[i].courseId);
+        let courseData = {
+          id: courses[i].id,
+          name: courses[i].name,
+          price: courses[i].price,
+          description: courses[i].description,
+          image: `http://${req.hostname}:3000/${courses[i].image}`,
+          rating: rating,
+          videos: videos.length,
+        };
+        courseDataArr.push(courseData);
+      }
+      res.status(200).json(courseDataArr);
     } else {
       res.status(404).json({ errors: ["No courses found"] });
     }

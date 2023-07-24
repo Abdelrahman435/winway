@@ -35,9 +35,4 @@ async function showCourses(req, res) {
     }
   }
 
-
-
-
-
-
 module.exports={ showCourses}

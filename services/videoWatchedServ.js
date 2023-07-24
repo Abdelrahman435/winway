@@ -13,5 +13,10 @@ async function add(data){
         return "video already watched"
     }
 }
+async function getVideo(id, course_id) {
+    const query = util.promisify(connection.query).bind(connection);
+    const videos = await query("SELECT * FROM videos WHERE id = ? and course_id =?", [id , course_id]);
+    return videos;
+  }
 
-module.exports ={add}
+module.exports ={add, getVideo}

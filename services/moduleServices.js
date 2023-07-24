@@ -4,7 +4,12 @@ const {connection}= require('./../db/dbConnection');
 
 async function createModule(moduleObj){
     const query = util.promisify(connection.query).bind(connection)
+    const module = await query("select * from modulecourses where course_id = ? and name_of_module =?", [moduleObj.course_id, moduleObj.name_of_module])
+    if(!module.length >0){
     await query("insert into modulecourses set ?",[moduleObj])
+    return "created"
+    }
+    return "module already exists "
 }
 async function getModuleById(id){
     const query = util.promisify(connection.query).bind(connection)

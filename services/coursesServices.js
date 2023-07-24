@@ -24,12 +24,12 @@ async function deleteCourse(id) {
 
 async function showcourses() {
   const query = util.promisify(connection.query).bind(connection);
-  return await query("select * from courses");
+  return await query("select id, name, price, description, image from courses");
 }
 
 async function searchCourses(search) {
   const query = util.promisify(connection.query).bind(connection);
-  return await query(`select * from courses ${search}`);
+  return await query(`select id, name, price, description, image from courses ${search}`);
 }
 
 async function getCollectionname(collectionName) {

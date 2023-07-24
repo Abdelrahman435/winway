@@ -9,8 +9,8 @@ const {
   deleteVideo,
   showvideos,
   checkCourse,
+  getModule
 } = require("../services/videosServices");
-const {getModuleById} = require("../services/moduleServices")
 const e = require("express");
 const { log } = require("util");
 
@@ -93,8 +93,7 @@ async function create(req, res) {
       time_of_upload: length,
       module_id: req.params.module_id
     };
-    const module = await getModuleById(req.params.module_id)
-    console.log(module.length);
+    const module = await getModule(req.params.module_id, req.params.course_id)
     if(module.length> 0){
     res.status(200).json({
       msg: await createVideo(videoData, videoData.module_id)

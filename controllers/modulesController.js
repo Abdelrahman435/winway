@@ -17,13 +17,19 @@ async function addModule (req,res){
             size:req.body.size,
             course_id: course[0].id
         };
-        await createModule(moduleObj)
-        res.status(200).json({
-            msg: "Module created",
+        const module= await createModule(moduleObj)
+        if(module== "created")
+        {
+        res.json({
+            module
+          });
+        }
+        res.status(403).json({
+            module
           });
     }catch (err) {
         console.error(err);
-        res.status(500).json({ errors: ["Internal server error"] });
+        // res.status(500).json({ errors: ["Internal server error"] });
       }
 }
 
